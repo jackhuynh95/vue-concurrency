@@ -1,0 +1,25 @@
+sudo: false
+env:
+  global:
+    - CC_TEST_REPORTER_ID=0f3713a6e7989ace379710aa54e49b98b055724a73dd375e2b6a72a7875d4145
+language: node_js
+node_js:
+  - "10"
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - node_modules
+before_install:
+  - npm update
+install:
+  - npm ci
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - npm test
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
